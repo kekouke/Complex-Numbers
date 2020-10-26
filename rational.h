@@ -6,23 +6,23 @@
 class Rational {
  public:
   Rational();
-  Rational(int numerator, int denominator);
+  Rational(int64_t numerator, int64_t denominator);
 
-  int getNumerator() const;
-  int getDenominator() const;
+  int64_t getNumerator() const;
+  int64_t getDenominator() const;
+  double toDouble() const;
 
   bool operator==(const Rational& other) const;
   Rational operator+(const Rational& other) const;
   Rational operator-(const Rational& other) const;
   Rational operator-() const;
   Rational operator*(const Rational& other) const;
-  Rational operator/(const Rational& other);
+  Rational operator/(const Rational& other) const;
   bool operator<(const Rational& other) const;
   bool operator>(const Rational& other) const;
-  friend std::istream& operator>>(std::istream& stream, Rational& data);
   friend std::ostream& operator<<(std::ostream& stream, const Rational& data);
 
  private:
-  int numerator_;
-  int denominator_;
+  int64_t numerator_;
+  int64_t denominator_;
 };

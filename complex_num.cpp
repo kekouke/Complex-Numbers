@@ -21,6 +21,25 @@ void Complex::setImaginary(Rational value) {
   imaginary_ = value;
 }
 
+Complex Complex::pow(int n) const
+{
+    Complex new_complex = *this;
+    for (size_t i = 2; i <= n; i++)
+    {
+        new_complex *= new_complex;
+    }
+
+    return new_complex;
+}
+
+double Complex::arg() const {
+    return atan((imaginary_ / real_).toDouble());
+}
+
+double Complex::abs() const {
+    return sqrt((real_ * real_ + imaginary_ * imaginary_).toDouble());
+}
+
 Complex Complex::operator+(const Complex &other) const {
   return Complex(real_ + other.getReal(),
                  imaginary_ + other.getImaginary());
@@ -36,15 +55,15 @@ Complex Complex::operator*(const Complex &other) const {
 }
 
 Complex Complex::operator/(const Complex &other) const {
-  Rational div = other.getReal() * other.getReal() - other.getImaginary() * other.getImaginary(); // знаменатель
+  Rational div = other.getReal() * other.getReal() - -(other.getImaginary() * other.getImaginary()); // знаменатель - (Big_Integer)
   Complex temp = *this * Complex(other.getReal(), -other.getImaginary()); // числитель
-  return Complex(temp.getReal() / div, temp.getImaginary() / div);
+  return Complex(temp.getReal() / div, temp.getImaginary() / div); // Передавать RTIONAL ИЗ ДВУХ ЧИСЕЛ
 }
 
 Complex& Complex::operator=(const Complex &other) {
   real_ = other.getReal();
   imaginary_ = other.getImaginary();
-  return *this; // ???
+  return *this;
 }
 
 Complex Complex::operator-() const {
@@ -59,36 +78,40 @@ bool Complex::operator!=(const Complex &other) const {
   return !this->operator==(other);
 }
 
-//TODO
-/*Complex& Complex::operator+=(const Complex &other) {
+
+Complex& Complex::operator+=(const Complex &other) {
   this->real_ = this->real_ + other.getReal();
   this->imaginary_ = this->imaginary_+ other.getImaginary();
   return *this;
 }
+
+
+
 Complex &Complex::operator-=(const Complex &other) {
   this->real_ = this->real_ - other.getReal();
   this->imaginary_ = this->imaginary_ - other.getImaginary();
   return *this;
 }
+
 Complex &Complex::operator*=(const Complex &other) {
   *this = *this * other;
   return *this;
 }
 Complex &Complex::operator/=(const Complex &other) {
+  *this = *this / other;
   return *this;
-}*/
-//
+}
 
 std::ostream& operator<<(std::ostream& stream, const Complex& complex) {
-  stream << complex.getReal() << " " << complex.getImaginary();
+  stream << complex.getReal() << " " << complex.getImaginary() << "i";
   return stream;
 }
 
-std::istream& operator>>(std::istream& stream, Complex& complex) {
-  Rational real;
-  Rational imaginary;
-  stream >> real >> imaginary;
-  complex.setReal(real);
-  complex.setImaginary(imaginary);
-  return stream;
-}
+//std::istream& operator>>(std::istream& stream, Complex& complex) {
+//  Rational real;
+//  Rational imaginary;
+//  stream >> real >> imaginary;
+//  complex.setReal(real);
+//  complex.setImaginary(imaginary);
+//  return stream;
+//}

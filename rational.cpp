@@ -7,7 +7,7 @@ Rational::Rational() {
   numerator_ = 0;
   denominator_ = 1;
 }
-Rational::Rational(int numerator, int denominator) {
+Rational::Rational(int64_t numerator, int64_t denominator) {
   if (denominator == 0) throw std::invalid_argument("Invalid argument");
 
   int gcd = std::gcd(numerator, denominator);
@@ -19,12 +19,16 @@ Rational::Rational(int numerator, int denominator) {
     numerator_ = -numerator_;
   }
 }
-int Rational::getNumerator() const{
+int64_t Rational::getNumerator() const{
   return numerator_;
 }
 
-int Rational::getDenominator() const {
+int64_t Rational::getDenominator() const {
   return denominator_;
+}
+
+double Rational::toDouble() const {
+    return numerator_ / (double) denominator_;
 }
 
 bool Rational::operator==(const Rational& other) const {
@@ -38,8 +42,8 @@ Rational Rational::operator*(const Rational& other) const {
   return {numerator_ * other.numerator_,
           denominator_ * other.denominator_};
 }
-Rational Rational::operator/(const Rational& other) {
-  if (numerator_ == 0) throw std::domain_error("Division by zero");
+Rational Rational::operator/(const Rational& other) const {
+  if (other.numerator_ == 0) throw std::domain_error("Division by zero");
   return { numerator_ * other.denominator_,
           denominator_ * other.numerator_};
 }
@@ -49,22 +53,6 @@ Rational Rational::operator-(const Rational &other) const {
 
 Rational Rational::operator-() const {
   return Rational(-numerator_, denominator_);
-}
-bool Rational::operator<(const Rational& other) const {
-  return (*this - other).getNumerator() < 0;
-}
-bool Rational::operator>(const Rational& other) const {
-  return (*this - other).getNumerator() > 0;
-}
-std::istream& operator>>(std::istream& stream, Rational& data) { // TODO
-  int num, denom;
-  char slash;
-  stream >> num >> slash >> denom;
-  if (!stream.fail() && slash =='/') {
-    data.numerator_ = num / std::gcd(denom, num);
-    data.denominator_ =  denom / std::gcd(denom, num);
-  }
-  return stream;
 }
 std::ostream& operator<<(std::ostream& stream, const Rational& data) {
   stream << data.numerator_ << "/" << data.denominator_;

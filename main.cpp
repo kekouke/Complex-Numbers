@@ -1,203 +1,163 @@
 #include <iostream>
+#include <sstream>
 #include "rational.h"
 #include "complex_num.h"
-#include <map>
-#include <set>
+#include "big_integers.h"
+
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+
 using namespace std;
 
-int main() {
-  {
-    const Rational r(3, 10);
-    if (r.getNumerator() != 3 || r.getDenominator() != 10) {
-      cout << "Rational(3, 10) != 3/10" << endl;
-      return 1;
+TEST_CASE("Class Rational testing", "[Rational]") {
+    {
+        const Rational r1(3, 10);
+        REQUIRE((r1.getNumerator() == 3 && r1.getDenominator() == 10));
     }
-  }
-
-  {
-    const Rational r(8, 12);
-    if (r.getNumerator() != 2 || r.getDenominator() != 3) {
-      cout << "Rational(8, 12) != 2/3" << endl;
-      return 2;
+    {
+        const Rational r1(8, 12);
+        REQUIRE((r1.getNumerator() == 2 && r1.getDenominator() == 3));
+    } 
+    {
+        const Rational r1(-4, 6);
+        REQUIRE((r1.getNumerator() == -2 && r1.getDenominator() == 3));
+    } 
+    {
+        const Rational r1(4, -6);
+        REQUIRE((r1.getNumerator() == -2 && r1.getDenominator() == 3));
     }
-  }
-
-  {
-    const Rational r(-4, 6);
-    if (r.getNumerator() != -2 || r.getDenominator() != 3) {
-      cout << "Rational(-4, 6) != -2/3" << endl;
-      return 3;
+    {
+        const Rational r1(0, 15);
+        REQUIRE((r1.getNumerator() == 0 && r1.getDenominator() == 1));
     }
-  }
-
-  {
-    const Rational r(4, -6);
-    if (r.getNumerator() != -2 || r.getDenominator() != 3) {
-      cout << "Rational(4, -6) != -2/3" << endl;
-      return 3;
-    }
-  }
-
-  {
-    const Rational r(0, 15);
-    if (r.getNumerator() != 0 || r.getDenominator() != 1) {
-      cout << "Rational(0, 15) != 0/1" << endl;
-      return 4;
-    }
-  }
-
-  {
-    const Rational defaultConstructed;
-    if (defaultConstructed.getNumerator() != 0 || defaultConstructed.getDenominator() != 1) {
-      cout << "Rational() != 0/1" << endl;
-      return 5;
-    }
-  }
-  {
-    Rational r1(4, 6);
-    Rational r2(2, 3);
-    bool equal = r1 == r2;
-    if (!equal) {
-      cout << "4/6 != 2/3" << endl;
-      return 1;
-    }
-  }
-
-  {
-    Rational a(2, 3);
-    Rational b(4, 3);
-    Rational c = a + b;
-    bool equal = c == Rational(2, 1);
-    if (!equal) {
-      cout << "2/3 + 4/3 != 2" << endl;
-      return 2;
-    }
-  }
-
-  {
-    Rational a(5, 7);
-    Rational b(2, 9);
-    Rational c = a - b;
-    bool equal = c == Rational(31, 63);
-    if (!equal) {
-      cout << "5/7 - 2/9 != 31/63" << endl;
-      return 3;
-    }
-  }
-  {
-    Rational a(2, 3);
-    Rational b(4, 3);
-    Rational c = a * b;
-    bool equal = c == Rational(8, 9);
-    if (!equal) {
-      cout << "2/3 * 4/3 != 8/9" << endl;
-      return 1;
-    }
-  }
-
-  {
-    Rational a(5, 4);
-    Rational b(15, 8);
-    Rational c = a / b;
-    bool equal = c == Rational(2, 3);
-    if (!equal) {
-      cout << "5/4 / 15/8 != 2/3" << endl;
-      return 2;
-    }
-  }
-  {
-    const set<Rational> rs = {{1, 2}, {1, 25}, {3, 4}, {3, 4}, {1, 2}};
-    if (rs.size() != 3) {
-      cout << "Wrong amount of items in the set" << endl;
-      return 1;
+    {
+        const Rational defaultConstructed;
+        REQUIRE((defaultConstructed.getNumerator() == 0 && defaultConstructed.getDenominator() == 1));
     }
 
-    vector<Rational> v;
-    for (auto x : rs) {
-      v.push_back(x);
+    SECTION("Algebraic operations with rational numbers") {
+        {
+            Rational a(2, 3);
+            Rational b(2, 3);
+            REQUIRE(a == b);
+        }
+        {
+            Rational a(4, 6);
+            Rational b(2, 3);
+            REQUIRE(a == b);
+        }
+        {
+            Rational a(2, -3);
+            Rational b(-2, 3);
+            REQUIRE(a == b);
+        }
+        {
+            Rational a;
+            Rational b(0, 15);
+            REQUIRE(a == b);
+        }
+        {
+            Rational a(2, 3);
+            Rational b(4, 3);
+            REQUIRE(a + b == Rational(2, 1));
+        }
+        {
+            Rational a(-4, 3);
+            Rational b(2, 3);
+            REQUIRE(a + b == Rational(-2, 3));
+        }
+        {
+            Rational a(15, 100);
+            Rational b(-15, 100);
+            REQUIRE(a + b == Rational(0, 1));
+        }
+        {
+            Rational a(5, 7);
+            Rational b(2, 9);
+            REQUIRE(a - b == Rational(31, 63));
+        }
+        {
+            Rational a(582, 1000);
+            Rational b(999, 1000);
+            REQUIRE(a - b == Rational(-417, 1000));
+        }
+        {
+            Rational a(1, 1);
+            REQUIRE(a - a == Rational(0, 1));
+        }
+        {
+            Rational a(7, 8);
+            REQUIRE(-a == Rational(-7, 8));
+        }
+        {
+            Rational a(-7, 8);
+            REQUIRE(-a == Rational(7, 8));
+        }
+        {
+            Rational a(2, 3);
+            Rational b(4, 3);
+            REQUIRE(a * b == Rational(8, 9));
+        }
+        {
+            Rational a(-1234567, 7654321);
+            Rational b(-789, 987);
+            REQUIRE(a * b == Rational(974073363, 7554814827));
+        }
+        {
+            Rational a(-1234567, 7654321);
+            Rational b(789, 987);
+            REQUIRE(a * b == Rational(-974073363, 7554814827));
+        }
+        {
+            Rational a(5, 4);
+            Rational b(15, 8);
+            REQUIRE(a / b == Rational(2, 3));
+        }
+        {
+            Rational a(-1234567, 7654321);
+            Rational b(-789, 987);
+            REQUIRE(a / b == Rational(406172543, 2013086423));
+        }
+        {
+            Rational a(-1234567, 7654321);
+            Rational b(789, 987);
+            REQUIRE(a / b == Rational(-406172543, 2013086423));
+        }
+        {
+            Rational a;
+            Rational b(15, 8);
+            REQUIRE(a / b == Rational());
+        }
     }
-    if (v != vector<Rational>{{1, 25}, {1, 2}, {3, 4}}) {
-      cout << "Rationals comparison works incorrectly" << endl;
-      return 2;
-    }
-  }
 
-  {
-    map<Rational, int> count;
-    ++count[{1, 2}];
-    ++count[{1, 2}];
-
-    ++count[{2, 3}];
-
-    if (count.size() != 2) {
-      cout << "Wrong amount of items in the map" << endl;
-      return 3;
-    }
-  }
-  {
-    ostringstream output;
-    output << Rational(-6, 8);
-    if (output.str() != "-3/4") {
-      cout << "Rational(-6, 8) should be written as \"-3/4\"" << endl;
-      return 1;
-    }
-  }
-
-  {
-    istringstream input("5/7");
-    Rational r;
-    input >> r;
-    bool equal = r == Rational(5, 7);
-    if (!equal) {
-      cout << "5/7 is incorrectly read as " << r << endl;
-      return 2;
-    }
-  }
-
-  {
-    istringstream input("");
-    Rational r;
-    bool correct = !(input >> r);
-    if (!correct) {
-      cout << "Read from empty stream works incorrectly" << endl;
-      return 3;
-    }
-  }
-
-  {
-    istringstream input("5/7 10/8");
-    Rational r1, r2;
-    input >> r1 >> r2;
-    bool correct = r1 == Rational(5, 7) && r2 == Rational(5, 4);
-    if (!correct) {
-      cout << "Multiple values are read incorrectly: " << r1 << " " << r2 << endl;
-      return 4;
+    SECTION("Input operation") {
+        stringstream stream;
+        std::string str;
+        stream << Rational(15, 18) << " " << Rational(-7, 9);
+        getline(stream, str);
+        REQUIRE("5/6 -7/9" == str);
     }
 
-    input >> r1;
-    input >> r2;
-    correct = r1 == Rational(5, 7) && r2 == Rational(5, 4);
-    if (!correct) {
-      cout << "Read from empty stream shouldn't change arguments: " << r1 << " " << r2 << endl;
-      return 5;
+    SECTION("Functions") {
+        {
+            Rational a(2, 5);
+            REQUIRE(0.4 == a.toDouble());
+        }
+        {
+            Rational a(-9, 100);
+            REQUIRE(-0.09 == a.toDouble());
+        }
+        {
+            Rational a;
+            REQUIRE(0 == a.toDouble());
+        }
+        {
+            Rational a(2, 3);
+            REQUIRE(Approx(0.666667).epsilon(0.01) == a.toDouble());
+        }
+        {
+            Rational a(6723472, 781236821349);
+            REQUIRE(Approx(8.60619e-06).epsilon(0.01) == a.toDouble());
+        }
     }
-  }
-
-  {
-    istringstream input1("1*2"), input2("1/"), input3("/4");
-    Rational r1, r2, r3;
-    input1 >> r1;
-    input2 >> r2;
-    input3 >> r3;
-    bool correct = r1 == Rational() && r2 == Rational() && r3 == Rational();
-    if (!correct) {
-      cout << "Reading of incorrectly formatted rationals shouldn't change arguments: "
-           << r1 << " " << r2 << " " << r3 << endl;
-
-      return 6;
-    }
-  }
-
-  cout << "OK" << endl;
-  return 0;
 }
