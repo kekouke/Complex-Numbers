@@ -17,11 +17,11 @@ TEST_CASE("Class Rational testing", "[Rational]") {
     {
         const Rational r1(8, 12);
         REQUIRE((r1.getNumerator() == 2 && r1.getDenominator() == 3));
-    } 
+    }
     {
         const Rational r1(-4, 6);
         REQUIRE((r1.getNumerator() == -2 && r1.getDenominator() == 3));
-    } 
+    }
     {
         const Rational r1(4, -6);
         REQUIRE((r1.getNumerator() == -2 && r1.getDenominator() == 3));
@@ -29,6 +29,18 @@ TEST_CASE("Class Rational testing", "[Rational]") {
     {
         const Rational r1(0, 15);
         REQUIRE((r1.getNumerator() == 0 && r1.getDenominator() == 1));
+    }
+    {
+        const Rational r1(5);
+        REQUIRE((r1.getNumerator() == 5 && r1.getDenominator() == 1));
+    }
+    {
+        const Rational r1(-5);
+        REQUIRE((r1.getNumerator() == -5 && r1.getDenominator() == 1));
+    }
+    {
+        const Rational r1(56346346436436);
+        REQUIRE((r1.getNumerator() == 56346346436436 && r1.getDenominator() == 1));
     }
     {
         const Rational defaultConstructed;
@@ -163,38 +175,81 @@ TEST_CASE("Class Rational testing", "[Rational]") {
 }
 
 TEST_CASE("Class Complex testing", "[Complex]") {
+    {
+        const Complex c1({ 5, 4 }, { 15, 8 });
+        REQUIRE((c1.getReal() == Rational(5, 4) && c1.getImaginary() == Rational(15, 8)));
+    }
+    {
+        const Complex c1({ -5, 4 }, { -15, 8 });
+        REQUIRE((c1.getReal() == Rational(-5, 4) && c1.getImaginary() == Rational(-15, 8)));
+    }
+    {
+        const Complex c1(1);
+        REQUIRE((c1.getReal() == Rational(1, 1) && c1.getImaginary() == Rational(0, 1)));
+    }
+    {
+        const Complex c1(12345678903);
+        REQUIRE((c1.getReal() == Rational(12345678903) && c1.getImaginary() == Rational(0, 1)));
+    }
+    {
+        const Complex c1;
+        REQUIRE((c1.getReal() == Rational() && c1.getImaginary() == Rational()));
+    }
 
-    // Add tests for constructors
-
-    Complex c1({ 5, 4 }, {15, 8});
-
-    //REQUIRE((c1.getReal() == Rational(5, 4) && c1.getImaginary() == Rational(15, 8)));
-    //
     SECTION("Algebraic operations with complex numbers") {
         {
-            Complex a({ 2, 3 }, { -5, 1 });
-            Complex b({ 2, 3 }, { -5, 1 });
+            Complex a({ 2, 3 }, {-5});
+            Complex b({ 2, 3 }, {-5});
             REQUIRE(a == b);
         }
         {
-            Complex a({ 4, 6 }, { -5, 1 });
+            Complex a({ 4, 6 }, {-5});
             Complex b({ 2, 3 }, { -10, 2 });
             REQUIRE(a == b);
         }
         {
-            Complex a({ 9, 1 }, {});
-            Complex b({ 9, 1 }, { 3, 1 });
+            Complex a({9}, {0});
+            Complex b({9}, {3});
             REQUIRE(a != b);
         }
         {
-            Complex a({ 2, 3 }, { -5, 1 });
+            Complex a({ 2, 3 }, {-5});
             Complex b({ 2, 3 }, { -5, 1 });
-            REQUIRE(a + b == Complex({ 4, 3 }, { -10, 1 }));
+            REQUIRE(a + b == Complex({ 4, 3 }, {-10}));
+        }
+        {
+            Complex a({ 5, 1 });
+            REQUIRE(a + 5 == Complex({ 10, 1 }));
+        }
+        {
+            Complex a({ 7, 3 }, { 8, 9 });
+            REQUIRE(a + 5 == Complex({ 22, 3 }, {8, 9}));
+        }
+        {
+            Complex a(5555555);
+            REQUIRE(a + 5 == Complex(5555560));
+        }
+        {
+            Complex a({ 2, 3 }, {-5});
+            Complex b({ 2, 3 }, {-5});
+            REQUIRE(a - b == Complex());
         }
         {
             Complex a({ 2, 3 }, { -5, 1 });
-            Complex b({ 2, 3 }, { -5, 1 });
-            REQUIRE(a - b == Complex({}, {}));
+            Complex b({ 2, 3 }, { -6, 1 });
+            REQUIRE(a - b == Complex({ 0, 1 }, { 1, 1 }));
+        }
+        {
+            Complex a(Rational{ 5, 1 });
+            REQUIRE(a - 5 == Complex());
+        }
+        {
+            Complex a({ 7, 3 }, { 8, 9 });
+            REQUIRE(a - 5 == Complex({ -8, 3 }, { 8, 9 }));
+        }
+        {
+            Complex a(5555555);
+            REQUIRE(a - 111 == 5555444);
         }
         {
             Complex a({ 2, 3 }, { -5, 1 });
@@ -202,10 +257,13 @@ TEST_CASE("Class Complex testing", "[Complex]") {
             REQUIRE(a * b == Complex({ -221, 9 }, { -20, 3 }));
         }
         {
+            REQUIRE(Complex(Rational{ 2, 3 }) * Complex(3) == Complex(Rational{ 2, 1 }));
+        }
+        {
             Complex a({ 2, 3 }, { -5, 1 });
             Complex b({ 2, 3 }, { -5, 1 });
-            REQUIRE(a / b == Complex({ 1, 1 }, { 0, 1 })); // TODO: Make a constructor with one argument
-        } 
+            REQUIRE(a / b == Complex({ 1 }));
+        }
         {
             Complex a({ 2, 3 }, { -5, 1 });
             Complex b({ 2, 3 }, { -5, 1 });
@@ -214,7 +272,7 @@ TEST_CASE("Class Complex testing", "[Complex]") {
         {
             Complex a({ 2, 3 }, { -5, 1 });
             Complex b({ 2, 3 }, { -5, 1 });
-            REQUIRE((a -= b) == Complex({}, {}));
+            REQUIRE((a -= b) == Complex({ 0 }));
         }
         {
             Complex a({ 2, 3 }, { -5, 1 });
@@ -224,21 +282,30 @@ TEST_CASE("Class Complex testing", "[Complex]") {
         {
             Complex a({ 2, 3 }, { -5, 1 });
             Complex b({ 2, 3 }, { -5, 1 });
-            REQUIRE((a /= b) == Complex({ 1, 1 }, { 0, 1 })); // TODO: Make a constructor with one argument
+            REQUIRE((a /= b) == Complex({ 1 }));
         }
     }
 
     SECTION("Input operation") {
-        stringstream stream;
-        std::string str;
-        stream << Complex({ 2, 3 }, { -5,1 }) << " ; " << Complex({ -13, 8 }, {});
-        getline(stream, str);
-        REQUIRE("2/3 + -5/1i ; -13/8" == str);
+        {
+            stringstream stream;
+            std::string str;
+            stream << Complex({ 2, 3 }, { -5,1 }) << " ; " << Complex(Rational{ -13, 8 });
+            getline(stream, str);
+            REQUIRE("2/3 + -5/1i ; -13/8" == str);
+        }
+        {
+            stringstream stream;
+            std::string str;
+            stream << Complex(5);
+            getline(stream, str);
+            REQUIRE("5/1" == str);
+        }
     }
 
     SECTION("Functions") {
         {
-            Complex c1({ 1, 1 }, { 0, 1 }); // Make default constructor
+            Complex c1;
             c1.setReal({ 2, 3 });
             c1.setImaginary({ -5, 1 });
             REQUIRE(c1 == Complex({ 2, 3 }, { -5, 1 }));

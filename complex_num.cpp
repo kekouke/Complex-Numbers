@@ -1,8 +1,23 @@
 #include "complex_num.h"
 
+Complex::Complex() {
+    real_ = 0;
+    imaginary_ = 0;
+}
+
 Complex::Complex(Rational real, Rational imaginary) {
   real_ = real;
   imaginary_ = imaginary;
+}
+
+Complex::Complex(int64_t num) {
+    real_ = num;
+    imaginary_ =  0;
+}
+
+Complex::Complex(Rational real) {
+    real_ = real;
+    imaginary_ = 0;
 }
 
 Rational Complex::getImaginary() const {

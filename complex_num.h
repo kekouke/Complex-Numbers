@@ -4,8 +4,10 @@
 class Complex {
 
  public:
+  Complex();
   Complex(Rational real, Rational imaginary);
-  Complex(double num);
+  Complex(int64_t num);
+  explicit Complex(Rational real);
 
   friend std::ostream& operator<<(std::ostream& stream, const Complex& data);
   Complex operator+(const Complex& other) const;

@@ -7,6 +7,7 @@ class Rational {
  public:
   Rational();
   Rational(int64_t numerator, int64_t denominator);
+  Rational(int64_t numerator);
 
   int64_t getNumerator() const;
   int64_t getDenominator() const;
@@ -18,8 +19,6 @@ class Rational {
   Rational operator-() const;
   Rational operator*(const Rational& other) const;
   Rational operator/(const Rational& other) const;
-  bool operator<(const Rational& other) const;
-  bool operator>(const Rational& other) const;
   friend std::ostream& operator<<(std::ostream& stream, const Rational& data);
 
  private:

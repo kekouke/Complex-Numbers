@@ -19,6 +19,10 @@ Rational::Rational(int64_t numerator, int64_t denominator) {
     numerator_ = -numerator_;
   }
 }
+Rational::Rational(int64_t numerator) {
+    numerator_ = numerator;
+    denominator_ = 1;
+}
 int64_t Rational::getNumerator() const{
   return numerator_;
 }
