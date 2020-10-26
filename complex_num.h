@@ -7,6 +7,7 @@ class Complex {
   Complex(Rational real, Rational imaginary);
   Complex(double num);
 
+  friend std::ostream& operator<<(std::ostream& stream, const Complex& data);
   Complex operator+(const Complex& other) const;
   Complex operator-(const Complex& other) const;
   Complex operator*(const Complex& other) const;

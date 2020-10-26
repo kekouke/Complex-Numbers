@@ -85,8 +85,6 @@ Complex& Complex::operator+=(const Complex &other) {
   return *this;
 }
 
-
-
 Complex &Complex::operator-=(const Complex &other) {
   this->real_ = this->real_ - other.getReal();
   this->imaginary_ = this->imaginary_ - other.getImaginary();
@@ -103,15 +101,10 @@ Complex &Complex::operator/=(const Complex &other) {
 }
 
 std::ostream& operator<<(std::ostream& stream, const Complex& complex) {
-  stream << complex.getReal() << " " << complex.getImaginary() << "i";
+  stream << complex.getReal();
+  if (complex.getImaginary().getNumerator() != 0) {
+      stream << " + " << complex.getImaginary() << "i";
+  }
+
   return stream;
 }
-
-//std::istream& operator>>(std::istream& stream, Complex& complex) {
-//  Rational real;
-//  Rational imaginary;
-//  stream >> real >> imaginary;
-//  complex.setReal(real);
-//  complex.setImaginary(imaginary);
-//  return stream;
-//}

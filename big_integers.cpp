@@ -12,31 +12,31 @@ Big_Integers::Big_Integers()
 = default; //TODO
 
 Big_Integers::Big_Integers(std::string num) {
-    for (size_t i = num.length();  i > 0; i--) {
-        big_integer_.push_back((int) (num[i - 1] - '0'));
+    for (size_t i = num.length(); i > 0; i--) {
+        big_integer_.push_back((int)(num[i - 1] - '0'));
     }
     isNegaive_ = false;
 }
 
 Big_Integers::Big_Integers(std::vector<int> num) : big_integer_(std::move(num)) {}
 
-Big_Integers& Big_Integers::operator=(const Big_Integers& other)
+Big_Integers& Big_Integers::operator=(const Big_Integers & other)
 {
     this->big_integer_ = other.big_integer_;
     return *this;
 }
 
 std::string Big_Integers::getNumber() const {
-  if (big_integer_.empty()) {
-    return "0";
-  }
+    if (big_integer_.empty()) {
+        return "0";
+    }
 
-  std::string number;
-  for (size_t i = big_integer_.size(); i > 0; i--) {
-    number += std::to_string(big_integer_[i - 1]);
-  }
+    std::string number;
+    for (size_t i = big_integer_.size(); i > 0; i--) {
+        number += std::to_string(big_integer_[i - 1]);
+    }
 
-  return number;
+    return number;
 }
 
 std::vector<int> Big_Integers::getVector() const
@@ -44,34 +44,37 @@ std::vector<int> Big_Integers::getVector() const
     return big_integer_;
 }
 
-bool Big_Integers::operator==(const Big_Integers &other) const {
-  if (isNegaive_ != other.isNegaive_) {
-    return false;
-  }
-
-  if (big_integer_.size() != other.big_integer_.size()) {
-    return false;
-  }
-
-  for (size_t i = 0; i < big_integer_.size(); i++) {
-    if (big_integer_[i] != other.big_integer_[i]) {
-      return false;
+bool Big_Integers::operator==(const Big_Integers & other) const {
+    if (isNegaive_ != other.isNegaive_) {
+        return false;
     }
-  }
 
-  return true;
+    if (big_integer_.size() != other.big_integer_.size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < big_integer_.size(); i++) {
+        if (big_integer_[i] != other.big_integer_[i]) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
-Big_Integers Big_Integers::operator+(const Big_Integers& other) const {
+Big_Integers Big_Integers::operator+(const Big_Integers & other) const {
     if (isNegaive_) {
         if (other.isNegaive_) {
             return -(-(*this) + -(other));
-        } else {
+        }
+        else {
             return other - (-*this);
         }
-    } else if (other.isNegaive_) {
+    }
+    else if (other.isNegaive_) {
         return *this - (-other);
-    } else {
+    }
+    else {
         std::vector<int> lhs = this->big_integer_;
         const std::vector<int>& rhs = other.big_integer_;
         int carry = 0;
@@ -91,7 +94,7 @@ Big_Integers Big_Integers::operator+(const Big_Integers& other) const {
     }
 }
 
-Big_Integers Big_Integers::operator-(const Big_Integers& other) const { // Only for a >= b
+Big_Integers Big_Integers::operator-(const Big_Integers & other) const { // Only for a >= b
     std::vector<int> lhs = this->big_integer_;
     const std::vector<int>& rhs = other.big_integer_;
     int carry = 0;
@@ -120,14 +123,14 @@ Big_Integers Big_Integers::operator-() const
     return new_integer;
 }
 
-Big_Integers Big_Integers::operator*(const Big_Integers& other) const {
+Big_Integers Big_Integers::operator*(const Big_Integers & other) const {
     const std::vector<int>& lhs = this->big_integer_;
     const std::vector<int>& rhs = other.big_integer_;
     std::vector<int> result(lhs.size() + rhs.size());
 
     for (size_t i = 0; i < lhs.size(); i++) {
         for (size_t j = 0, carry = 0; j < rhs.size() || carry; j++) {
-            int64_t current = (int)carry + (int64_t) lhs[i] * (j < rhs.size() ? rhs[j] : 0);
+            int64_t current = (int)carry + (int64_t)lhs[i] * (j < rhs.size() ? rhs[j] : 0);
             current += result[i + j];
             result[i + j] = current % 10;
             carry = current / 10;
