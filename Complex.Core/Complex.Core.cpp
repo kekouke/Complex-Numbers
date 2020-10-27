@@ -1,11 +1,10 @@
-#include <iostream>
+﻿#include <iostream>
 #include <sstream>
 #include "rational.h"
 #include "complex_num.h"
-#include "big_integers.h"
 
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "../catch.hpp"
 
 using namespace std;
 
@@ -210,12 +209,12 @@ TEST_CASE("Class Complex testing", "[Complex]") {
 
     SECTION("Algebraic operations with complex numbers") {
         {
-            Complex a({ 2, 3 }, {-5});
-            Complex b({ 2, 3 }, {-5});
+            Complex a({ 2, 3 }, { -5 });
+            Complex b({ 2, 3 }, { -5 });
             REQUIRE(a == b);
         }
         {
-            Complex a({ 4, 6 }, {-5});
+            Complex a({ 4, 6 }, { -5 });
             Complex b({ 2, 3 }, { -10, 2 });
             REQUIRE(a == b);
         }
@@ -225,9 +224,9 @@ TEST_CASE("Class Complex testing", "[Complex]") {
             REQUIRE(a != b);
         }
         {
-            Complex a({ 2, 3 }, {-5});
+            Complex a({ 2, 3 }, { -5 });
             Complex b({ 2, 3 }, { -5, 1 });
-            REQUIRE(a + b == Complex({ 4, 3 }, {-10}));
+            REQUIRE(a + b == Complex({ 4, 3 }, { -10 }));
         }
         {
             Complex a({ 5, 1 });
@@ -235,7 +234,7 @@ TEST_CASE("Class Complex testing", "[Complex]") {
         }
         {
             Complex a({ 7, 3 }, { 8, 9 });
-            REQUIRE(a + 5 == Complex({ 22, 3 }, {8, 9}));
+            REQUIRE(a + 5 == Complex({ 22, 3 }, { 8, 9 }));
         }
         {
             Complex a(5555555);
@@ -251,8 +250,8 @@ TEST_CASE("Class Complex testing", "[Complex]") {
             REQUIRE(a + b == Complex(0.0, 8.6));
         }
         {
-            Complex a({ 2, 3 }, {-5});
-            Complex b({ 2, 3 }, {-5});
+            Complex a({ 2, 3 }, { -5 });
+            Complex b({ 2, 3 }, { -5 });
             REQUIRE(a - b == Complex());
         }
         {
@@ -289,7 +288,7 @@ TEST_CASE("Class Complex testing", "[Complex]") {
             Complex a(0.1);
             Complex b(10);
             REQUIRE(a * b == 1);
-        } 
+        }
         {
             Complex a(0, 0);
             Complex b(0, 0);
