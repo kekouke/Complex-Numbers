@@ -1,23 +1,33 @@
 #include "complex_num.h"
 
-Complex::Complex() {
-    real_ = 0;
-    imaginary_ = 0;
-}
+Complex::Complex() : Complex((int64_t) 0) {}
 
-Complex::Complex(Rational real, Rational imaginary) {
-  real_ = real;
-  imaginary_ = imaginary;
-}
+Complex::Complex(int64_t num) : Complex(Rational(num)) {}
 
-Complex::Complex(int64_t num) {
-    real_ = num;
-    imaginary_ =  0;
-}
+Complex::Complex(int num) : Complex((int64_t) num) {}
+
+Complex::Complex(int real, int imaginary) : Complex(Rational(real), Rational(imaginary)) {}
 
 Complex::Complex(Rational real) {
     real_ = real;
     imaginary_ = 0;
+}
+
+Complex::Complex(double num) {
+    int64_t x = 100'000'000;
+    real_ = Rational(x * num, x);
+    imaginary_ = 0;
+}
+
+Complex::Complex(Rational real, Rational imaginary) {
+    real_ = real;
+    imaginary_ = imaginary;
+}
+
+Complex::Complex(double real, double imaginary) {
+    int64_t x = 100'000'000;
+    real_ = Rational(x * real, x);
+    imaginary_ = Rational(x * imaginary, x);
 }
 
 Rational Complex::getImaginary() const {
@@ -70,9 +80,9 @@ Complex Complex::operator*(const Complex &other) const {
 }
 
 Complex Complex::operator/(const Complex &other) const {
-  Rational div = other.getReal() * other.getReal() - -(other.getImaginary() * other.getImaginary()); // знаменатель - (Big_Integer)
-  Complex temp = *this * Complex(other.getReal(), -other.getImaginary()); // числитель
-  return Complex(temp.getReal() / div, temp.getImaginary() / div); // Передавать RTIONAL ИЗ ДВУХ ЧИСЕЛ
+  Rational divider = other.getReal() * other.getReal() - -(other.getImaginary() * other.getImaginary());
+  Complex temp = *this * Complex(other.getReal(), -other.getImaginary());
+  return Complex(temp.getReal() / divider, temp.getImaginary() / divider);
 }
 
 Complex& Complex::operator=(const Complex &other) {

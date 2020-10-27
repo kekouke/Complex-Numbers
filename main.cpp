@@ -71,7 +71,7 @@ TEST_CASE("Class Rational testing", "[Rational]") {
         {
             Rational a(2, 3);
             Rational b(4, 3);
-            REQUIRE(a + b == Rational(2, 1));
+            REQUIRE(a + b == Rational(2));
         }
         {
             Rational a(-4, 3);
@@ -81,7 +81,7 @@ TEST_CASE("Class Rational testing", "[Rational]") {
         {
             Rational a(15, 100);
             Rational b(-15, 100);
-            REQUIRE(a + b == Rational(0, 1));
+            REQUIRE(a + b == Rational());
         }
         {
             Rational a(5, 7);
@@ -95,7 +95,7 @@ TEST_CASE("Class Rational testing", "[Rational]") {
         }
         {
             Rational a(1, 1);
-            REQUIRE(a - a == Rational(0, 1));
+            REQUIRE(a - a == Rational());
         }
         {
             Rational a(7, 8);
@@ -195,6 +195,18 @@ TEST_CASE("Class Complex testing", "[Complex]") {
         const Complex c1;
         REQUIRE((c1.getReal() == Rational() && c1.getImaginary() == Rational()));
     }
+    {
+        const Complex c1(40.01);
+        REQUIRE((c1.getReal() == Rational(4001, 100) && c1.getImaginary() == Rational()));
+    }
+    {
+        const Complex c1(40.01, -12.9);
+        REQUIRE((c1.getReal() == Rational(4001, 100) && c1.getImaginary() == Rational(-129, 10)));
+    }
+    {
+        const Complex c1(0.12345678);
+        REQUIRE(c1.getReal() == Rational(12345678, 100'000'000));
+    }
 
     SECTION("Algebraic operations with complex numbers") {
         {
@@ -208,8 +220,8 @@ TEST_CASE("Class Complex testing", "[Complex]") {
             REQUIRE(a == b);
         }
         {
-            Complex a({9}, {0});
-            Complex b({9}, {3});
+            Complex a(9, 0);
+            Complex b(9, 3);
             REQUIRE(a != b);
         }
         {
@@ -230,6 +242,15 @@ TEST_CASE("Class Complex testing", "[Complex]") {
             REQUIRE(a + 5 == Complex(5555560));
         }
         {
+            Complex a(1);
+            REQUIRE(a + 0.1 == Complex(1.1));
+        }
+        {
+            Complex a(1.1, 4.3);
+            Complex b(-1.1, 4.3);
+            REQUIRE(a + b == Complex(0.0, 8.6));
+        }
+        {
             Complex a({ 2, 3 }, {-5});
             Complex b({ 2, 3 }, {-5});
             REQUIRE(a - b == Complex());
@@ -248,13 +269,31 @@ TEST_CASE("Class Complex testing", "[Complex]") {
             REQUIRE(a - 5 == Complex({ -8, 3 }, { 8, 9 }));
         }
         {
+            Complex a(40.001, 12.9);
+            REQUIRE(a - Complex(40) == Complex(0.001, 12.9));
+        }
+        {
             Complex a(5555555);
             REQUIRE(a - 111 == 5555444);
+        }
+        {
+            Complex a(1);
+            REQUIRE(a - 0.75 == Complex(0.25));
         }
         {
             Complex a({ 2, 3 }, { -5, 1 });
             Complex b({ 2, 3 }, { -5, 1 });
             REQUIRE(a * b == Complex({ -221, 9 }, { -20, 3 }));
+        }
+        {
+            Complex a(0.1);
+            Complex b(10);
+            REQUIRE(a * b == 1);
+        } 
+        {
+            Complex a(0, 0);
+            Complex b(0, 0);
+            REQUIRE(a * b == 0);
         }
         {
             REQUIRE(Complex(Rational{ 2, 3 }) * Complex(3) == Complex(Rational{ 2, 1 }));
@@ -263,6 +302,11 @@ TEST_CASE("Class Complex testing", "[Complex]") {
             Complex a({ 2, 3 }, { -5, 1 });
             Complex b({ 2, 3 }, { -5, 1 });
             REQUIRE(a / b == Complex({ 1 }));
+        }
+        {
+            Complex a(0.1);
+            Complex b(1.1);
+            REQUIRE((a / b).getReal().toDouble() == Approx(0.09090).epsilon(0.01));
         }
         {
             Complex a({ 2, 3 }, { -5, 1 });

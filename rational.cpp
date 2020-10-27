@@ -3,10 +3,8 @@
 #include <numeric>
 #include <sstream>
 
-Rational::Rational() {
-  numerator_ = 0;
-  denominator_ = 1;
-}
+Rational::Rational() : Rational(0) {}
+
 Rational::Rational(int64_t numerator, int64_t denominator) {
   if (denominator == 0) throw std::invalid_argument("Invalid argument");
 
