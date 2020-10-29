@@ -1,4 +1,5 @@
 #include "complex_num.h"
+#include <exception>
 
 Complex::Complex() : Complex((int64_t)0) {}
 
@@ -82,6 +83,9 @@ Complex Complex::operator*(const Complex& other) const {
 Complex Complex::operator/(const Complex& other) const {
     Rational divider = other.getReal() * other.getReal() - -(other.getImaginary() * other.getImaginary());
     Complex temp = *this * Complex(other.getReal(), -other.getImaginary());
+
+    if (divider == 0) throw std::invalid_argument("Division by zero");
+
     return Complex(temp.getReal() / divider, temp.getImaginary() / divider);
 }
 
