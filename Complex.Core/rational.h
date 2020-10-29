@@ -13,6 +13,7 @@ public:
     int64_t getDenominator() const;
     double toDouble() const;
 
+    Rational& operator=(const Rational& other);
     bool operator==(const Rational& other) const;
     Rational operator+(const Rational& other) const;
     Rational operator-(const Rational& other) const;

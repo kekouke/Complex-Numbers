@@ -105,14 +105,12 @@ bool Complex::operator!=(const Complex& other) const {
 
 
 Complex& Complex::operator+=(const Complex& other) {
-    this->real_ = this->real_ + other.getReal();
-    this->imaginary_ = this->imaginary_ + other.getImaginary();
+    *this = *this + other;
     return *this;
 }
 
 Complex& Complex::operator-=(const Complex& other) {
-    this->real_ = this->real_ - other.getReal();
-    this->imaginary_ = this->imaginary_ - other.getImaginary();
+    *this = *this - other;
     return *this;
 }
 

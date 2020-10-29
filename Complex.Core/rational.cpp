@@ -33,6 +33,13 @@ double Rational::toDouble() const {
     return numerator_ / (double)denominator_;
 }
 
+Rational& Rational::operator=(const Rational& other) {
+    this->numerator_ = other.numerator_;
+    this->denominator_ = other.denominator_;
+    
+    return *this;
+}
+
 bool Rational::operator==(const Rational& other) const {
     return numerator_ == other.numerator_ && denominator_ == other.denominator_;
 }

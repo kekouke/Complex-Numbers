@@ -238,6 +238,7 @@ TEST_CASE("Class Complex testing", "[Complex]") {
         }
         {
             Complex a(5555555);
+
             REQUIRE(a + 5 == Complex(5555560));
         }
         {
