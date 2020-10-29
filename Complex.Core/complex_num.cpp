@@ -8,7 +8,7 @@ Complex::Complex(int num) : Complex((int64_t)num) {}
 
 Complex::Complex(int real, int imaginary) : Complex(Rational(real), Rational(imaginary)) {}
 
-Complex::Complex(Rational real) {
+Complex::Complex(const Rational& real) {
     real_ = real;
     imaginary_ = 0;
 }
@@ -19,7 +19,7 @@ Complex::Complex(double num) {
     imaginary_ = 0;
 }
 
-Complex::Complex(Rational real, Rational imaginary) {
+Complex::Complex(const Rational& real, const Rational& imaginary) {
     real_ = real;
     imaginary_ = imaginary;
 }

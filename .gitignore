@@ -1041,3 +1041,4 @@ dkms.conf
 
 Complex.Core/.opencppcov/
 Complex.Core/*.vcxproj.*
+Complex.Core/*.vcxproj
